@@ -1,0 +1,24 @@
+body {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.inline-block {
+    display: inline-block;
+}
+.divider {
+    height: 1px;
+    width:100%;
+    display:block; /* for use on default inline elements like span */
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+.action {
+    cursor: pointer;
+}
+.my-alert {
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
