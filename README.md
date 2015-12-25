@@ -36,6 +36,7 @@ Admin host
 ```
 git clone https://github.com/Dongss/pm2-dog-admin
 cd pm2-dog-admin
+npm install
 node index.js --config config.json
 ```
 
