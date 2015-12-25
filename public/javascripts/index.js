@@ -1,4 +1,4 @@
-var socket = io("http://192.168.8.131:10106");
+var socket = io.connect("http://192.168.8.131:10106");
 
 var servers = [];
 var statusLabelClass = {
@@ -37,18 +37,6 @@ var renderList = function(list) {
         server: list.server,
         updated: updated
     });
-
-    /*
-    $(".pm2-host").each(function(index, el) {
-        if (
-            !_.find(servers, function(server) {
-                return server.alias == el.id;
-            })
-        ) {
-            el.remove();    
-        }
-    });
-    */
 
     servers.forEach(function(server) {
         if (server.alias == list.server.alias) {
@@ -95,6 +83,11 @@ var eventsInit = function() {
     $("#pm2-dog-list").on("click", ".action", onActionClicked);
 };
 
+
+socket.on('connect', function() {
+    myAlert("success", "<strong>[ CONNECTED ]</strong>  You have been connected with server !", 4000);
+});
+
 socket.on('list', function(data) {
     if (data.retCode !== 0) { 
         myAlert("warning", "Get ist failed: " + data.Message);
@@ -102,6 +95,10 @@ socket.on('list', function(data) {
     }
     formatServers(data.list.server);
     renderList(data.list);
+});
+
+socket.on('disconnect', function() {
+    myAlert("danger", "<strong>[ DISCONNECTED ]</strong>  You have been disconnected !");
 });
 
 eventsInit();
