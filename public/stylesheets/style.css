@@ -22,3 +22,12 @@ body {
     right: 0;
     text-align: center;
 }
+.alias {
+    color: rgba(33, 150, 243, 0.59);
+    float: left;
+    font-size: 30px;
+}
+.updated {
+    float: right;
+    color: #9E9E9E;
+}

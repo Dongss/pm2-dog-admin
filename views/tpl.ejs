@@ -1,5 +1,6 @@
 <script type="text/template" id="pm2_list_table_tpl">
-    <h2>{{server.alias}}</h2>
+    <span class="updated">[ UPDATED ] {{updated}}</span>
+    <span class="alias">{{server.alias}}</span>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -11,7 +12,7 @@
                 <th>Status</th>
                 <th>CPU(%)</th>
                 <th>Memory(MB)</th>
-                <th>Operate</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>

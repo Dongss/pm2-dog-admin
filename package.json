@@ -1,5 +1,5 @@
 {
-  "name": "pm2-dog",
+  "name": "pm2-dog-admin",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
