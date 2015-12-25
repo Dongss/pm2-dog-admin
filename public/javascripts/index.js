@@ -31,7 +31,7 @@ var renderList = function(list) {
         process.pm2_env.label_class = statusLabelClass[process.pm2_env.status] || "label-default";
     });
 
-    var updated = moment().fromNow();
+    var updated = moment().format("HH:mm:ss");
     var html = Mustache.to_html($("#pm2_list_table_tpl").html(), { 
         list: list.list,
         server: list.server,
