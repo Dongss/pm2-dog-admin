@@ -76,6 +76,8 @@ var onActionClicked = function(e) {
     var action = $target.attr("data-action");
     var pmId = $pm.attr("data-process-id");
     var alias = $pm.attr("data-alias");
+    var r = window.confirm("Sure to exec [" + action + "] action to " + pmId + " process on host: " + alias + " ?");
+    if (!r) { return false; }
     actionRequest(alias, action, pmId);
 };
 
