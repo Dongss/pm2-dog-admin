@@ -23,7 +23,9 @@ var myAlert = function(alertClass, content, timeout) {
 
 var formatServers = function(server) {
     servers.push(server);
-    servers = _.uniq(servers);
+    servers = _.uniq(servers, false, function(item) {
+        return item.alias;
+    });
 };
 
 var processesTable = {
