@@ -1,9 +1,9 @@
-<script type="text/template" id="pm2_list_table_tpl">
-    <span class="updated">[ UPDATED ] {{updated}}</span>
-    <span class="alias">{{server.alias}}</span>
-    <table class="table table-hover">
-        <thead>
-            <tr>
+<script type="text/template" id="pm2_list_host_container">
+    <div class="pm2-host" id="{{server.alias}}">
+        <span class="updated">[ UPDATED ]{{updated}}</span>
+        <span class="alias">{{server.alias}}</span>
+        <table class="table table-hover">
+            <thead>
                 <th>PID</th>
                 <th>PMID</th>
                 <th>Name</th>
@@ -13,34 +13,8 @@
                 <th>CPU(%)</th>
                 <th>Memory(MB)</th>
                 <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#list}}
-                <tr data-process-id="{{pm_id}}" data-alias="{{server.alias}}">
-                    <th>{{pid}}</th>
-                    <th>{{pm_id}}</th>
-                    <th>{{name}}</th>
-                    <th>{{pm2_env.restart_time}}</th>
-                    <th>{{pm2_env.pm_uptime}}</th>
-                    <th><span class="label {{pm2_env.label_class}}">{{pm2_env.status}}</span></th>
-                    <th>{{monit.cpu}}</th>
-                    <th>{{monit.memory}}</th>
-                    <th>
-                        <span class="glyphicon glyphicon-repeat action" data-action="restart" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Retart process"></span>
-                        <span class="glyphicon glyphicon-pause action" data-action="stop" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Stop process"></span>
-                        <span class="glyphicon glyphicon-play action" data-action="start" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Start process"></span>
-                        <span class="glyphicon glyphicon-retweet action" data-action="reload" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Reload process"></span>
-
-                    </th>
-                </tr>
-            {{/list}}
-        </tbody>
-    </table>
-</script>
-
-<script type="text/template" id="pm2_list_host_container">
-    <div class="pm2-host" id="{{server.alias}}">
+            </thead>
+        </table>
     </div>
 </script>
 

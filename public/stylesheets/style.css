@@ -15,12 +15,14 @@ body {
 }
 .action {
     cursor: pointer;
+    margin-right: 5px;
 }
 .my-alert {
     position: fixed;
     left: 0;
     right: 0;
     text-align: center;
+    index-z: 9999;
 }
 .alias {
     color: rgba(33, 150, 243, 0.59);

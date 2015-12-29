@@ -4,7 +4,7 @@ var servers = [];
 var statusLabelClass = {
     online: "label-success",
     stopped: "label-warning",
-    error: "label-danger"
+    errored: "label-danger"
 };
 
 var myAlert = function(alertClass, content, timeout) {
@@ -26,28 +26,79 @@ var formatServers = function(server) {
     servers = _.uniq(servers);
 };
 
+var processesTable = {
+    init: function(el, list) {
+        el.DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            bFilter: false,
+            data: list.list,
+            createdRow: function(row, data, rowIndex) {
+                $(row).attr('data-process-id', data.pm_id);
+                $(row).attr('data-alias', data.server_info.alias);
+            },
+            columns: [{
+                data: 'pid'
+            }, {
+                data: 'pm_id'  
+            }, {
+                data: 'name'    
+            }, {
+                data: function(row) {
+                    return row.pm2_env.restart_time;
+                }    
+            }, {
+                data: function(row) {
+                    return row.pm2_env.pm_uptime;
+                }        
+            }, {
+                data: function(row) {
+                    return '<span class="label ' + row.pm2_env.label_class + '">' + row.pm2_env.status + '</span>'
+                }    
+            }, {
+                data: function(row) {
+                    return row.monit.cpu;
+                }
+            }, {
+                data: function(row) {
+                    return row.monit.memory;
+                }    
+            }, {
+                data: function (row) {
+                    return '<span class="glyphicon glyphicon-repeat action" data-action="restart" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Retart process"></span>'
+                         + '<span class="glyphicon glyphicon-pause action" data-action="stop" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Stop process"></span>'
+                         + '<span class="glyphicon glyphicon-play action" data-action="start" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Start process"></span>'
+                         + '<span class="glyphicon glyphicon-retweet action" data-action="reload" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Reload process"></span>';
+                }    
+            }]
+        });
+    },
+    reload: function(el, data, updated) {
+        el.dataTable().fnClearTable();
+        el.dataTable().fnAddData(data.list);
+        el.parent('div').siblings('.updated').html('[ UPDATED ]' + updated)
+    }
+};
+
 var renderList = function(list) {
     list.list.forEach(function(process) {
         process.pm2_env.label_class = statusLabelClass[process.pm2_env.status] || "label-default";
     });
 
     var updated = moment().format("HH:mm:ss");
-    var html = Mustache.to_html($("#pm2_list_table_tpl").html(), { 
-        list: list.list,
-        server: list.server,
-        updated: updated
-    });
 
     servers.forEach(function(server) {
         if (server.alias == list.server.alias) {
             if ($("#" + server.alias).get(0)) {
-                $("#" + server.alias).html(html);
+                processesTable.reload($("#" + server.alias + " .table"), list, updated);
             } else {
                 var hostHtml = Mustache.to_html($("#pm2_list_host_container").html(), {
-                    server: server
+                    server: server,
+                    updated: updated
                 });
                 $("#pm2-dog-list").append(hostHtml);
-                $("#" + server.alias).html(html);
+                processesTable.init($("#" + server.alias + " .table"), list);
             }
         }
     });
@@ -76,7 +127,7 @@ var onActionClicked = function(e) {
     var action = $target.attr("data-action");
     var pmId = $pm.attr("data-process-id");
     var alias = $pm.attr("data-alias");
-    var r = window.confirm("Sure to exec [" + action + "] action to " + pmId + " process on host: " + alias + " ?");
+    var r = window.confirm("Sure to exec [" + action + "] action to [ pm_id: " + pmId + " ] process on [ host: " + alias + " ] ?");
     if (!r) { return false; }
     actionRequest(alias, action, pmId);
 };
