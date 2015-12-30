@@ -79,7 +79,7 @@ var processesTable = {
     reload: function(el, data, updated) {
         el.dataTable().fnClearTable();
         el.dataTable().fnAddData(data.list);
-        el.parent('div').siblings('.updated').html('[ UPDATED ]' + updated)
+        el.parent('div').siblings('.updated').html('[ UPDATED ]' + updated);
     }
 };
 

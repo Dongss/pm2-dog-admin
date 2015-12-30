@@ -64,7 +64,7 @@ module.exports.action = function(req, res, next) {
 
 module.exports.index = function(req, res, next) {
     res.render('index', {});
-}
+};
 
 module.exports.ioCtrl = function() {
     var sendList = function(socket, data, server) {
@@ -76,12 +76,12 @@ module.exports.ioCtrl = function() {
     };
 
     SERVERS.forEach(function(server) {
-        var socket = ioClient(server.host);
+        var socket = ioClient.connect(server.host);
         socket.on('pm2_list', function(data) {
             sendList(socket, data, server);
         });
     });
-}
+};
 
 module.exports.ioInit = function(io, callback) {
     io.on('connection', function(socket) {
@@ -93,4 +93,4 @@ module.exports.ioInit = function(io, callback) {
         };
         return callback();
     });
-}
+};
