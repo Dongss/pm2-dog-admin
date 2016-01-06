@@ -29,6 +29,17 @@ function formatList(list, server) {
     };
 }
 
+module.exports.servers = function(req, res, next) {
+    res.json({
+        servers: _.map(SERVERS, function(server) {
+            return {
+                id: server.alias,
+                text: server.alias
+            };
+        })
+    });
+};
+
 module.exports.action = function(req, res, next) {
     var alias = req.query.alias;
     var pmId = req.query.pm_id;

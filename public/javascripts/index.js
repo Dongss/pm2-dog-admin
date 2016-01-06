@@ -1,6 +1,8 @@
 var socket = io.connect("http://192.168.8.131:10106");
 
 var servers = [];
+var displayHosts = [];
+
 var statusLabelClass = {
     online: "label-success",
     stopped: "label-warning",
@@ -77,6 +79,27 @@ var processesTable = {
         });
     },
     reload: function(el, data, updated) {
+        var selectedHosts = $("#hosts-select").select2('data');
+        displayHosts = _.map(selectedHosts, function(host) {
+            return host.id;
+        });
+
+        if (displayHosts.length === 0) {
+            $('.pm2-host').show();
+        } else {
+            var display = _.find(displayHosts, function(host) {
+                return data.server.alias == host;
+            });
+            var hostEl = el.closest('.pm2-host');
+            var hostElVisible = hostEl.is(':visible');
+            if (!display && hostElVisible) {
+                hostEl.hide();
+                return false; 
+            } else if (display && !hostElVisible){
+                hostEl.show();
+            }
+        }
+
         el.dataTable().fnClearTable();
         el.dataTable().fnAddData(data.list);
         el.parent('div').siblings('.updated').html('[ UPDATED ]' + updated);
@@ -92,9 +115,9 @@ var renderList = function(list) {
 
     servers.forEach(function(server) {
         if (server.alias == list.server.alias) {
-            if ($("#" + server.alias).get(0)) {
+            if ($("#" + server.alias).get(0)) { // Update if host exit
                 processesTable.reload($("#" + server.alias + " .table"), list, updated);
-            } else {
+            } else { // Append if not exit
                 var hostHtml = Mustache.to_html($("#pm2_list_host_container").html(), {
                     server: server,
                     updated: updated
@@ -121,7 +144,27 @@ var actionRequest = function(alias, action, pmId) {
         myAlert("danger", "<strong>[ " + action + " ]</strong>  process error: " + error);
         return false;
     });
-}
+};
+
+var hostsSelectRender = function() {
+    $.ajax({
+        url: '/servers',
+        contentType: 'application/json'
+    })
+    .done(function(data) {
+        var selectData = data.servers;
+        $(document).ready(function() {
+            $('#hosts-select').select2({ // select2 init
+                placeholder: 'Select your hosts',
+                data: _.sortBy(selectData, 'id'),
+                allowClear: true
+            });
+        });
+    })
+    .fail(function(xhr, status, error) {
+        myAlert("danger", "<strong>[ ERROR ]</strong> get hosts list failed: " + error);
+    });
+};
 
 var onActionClicked = function(e) {
     var $target = $(e.currentTarget);
@@ -156,4 +199,9 @@ socket.on('disconnect', function() {
     myAlert("danger", "<strong>[ DISCONNECTED ]</strong>  You have been disconnected !");
 });
 
-eventsInit();
+var init = function() {
+    hostsSelectRender();
+    eventsInit();   
+};
+
+init();

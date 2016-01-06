@@ -22,6 +22,10 @@ app.get('/', function(req, res, next) {
     controller.index(req, res, next);
 });
 
+app.get('/servers', function(req, res, next) {
+    controller.servers(req, res, next);
+});
+
 app.get('/action', function(req, res, next) {
     controller.action(req, res, next);
 });
