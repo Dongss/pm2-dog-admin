@@ -33,3 +33,6 @@ body {
     float: right;
     color: #9E9E9E;
 }
+.select2-dropdown {
+    margin-left: 50px;
+}
