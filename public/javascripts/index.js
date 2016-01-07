@@ -90,7 +90,9 @@ var processesTable = {
             $('.pm2-host').show();
         } else {
             var display = _.find(displayHosts, function(host) {
-                return data.server.alias == host;
+                var originString = data.server.alias.toLowerCase();
+                var subString = host.toLowerCase();
+                return originString.indexOf(subString) > -1;
             });
             var hostEl = el.closest('.pm2-host');
             var hostElVisible = hostEl.is(':visible');
@@ -159,7 +161,8 @@ var hostsSelectRender = function() {
             $('#hosts-select').select2({ // select2 init
                 placeholder: '  Select by hosts',
                 data: _.sortBy(selectData, 'id'),
-                allowClear: true
+                allowClear: true,
+                tags: true
             });
         });
     })
