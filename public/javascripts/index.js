@@ -36,7 +36,9 @@ var processesTable = {
             paging: false,
             ordering: false,
             info: false,
-            bFilter: false,
+            bFilter: true,
+            sDom: '',
+            search: $("#process-select").val(),
             data: list.list,
             createdRow: function(row, data, rowIndex) {
                 $(row).attr('data-process-id', data.pm_id);
@@ -155,7 +157,7 @@ var hostsSelectRender = function() {
         var selectData = data.servers;
         $(document).ready(function() {
             $('#hosts-select').select2({ // select2 init
-                placeholder: 'Select your hosts',
+                placeholder: 'Select by hosts',
                 data: _.sortBy(selectData, 'id'),
                 allowClear: true
             });
@@ -177,8 +179,19 @@ var onActionClicked = function(e) {
     actionRequest(alias, action, pmId);
 };
 
+var onProcessSelect = function(e) {
+    var $target = $(e.currentTarget);
+    $('.pm2-host .table').each(function() {
+        $(this).DataTable()
+            .column(2)
+            .search($target.val())
+            .draw();
+    });
+};
+
 var eventsInit = function() {
     $("#pm2-dog-list").on("click", ".action", onActionClicked);
+    $("#process-select").on("keyup", onProcessSelect);
 };
 
 
