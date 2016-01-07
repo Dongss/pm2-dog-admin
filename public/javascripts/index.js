@@ -157,7 +157,7 @@ var hostsSelectRender = function() {
         var selectData = data.servers;
         $(document).ready(function() {
             $('#hosts-select').select2({ // select2 init
-                placeholder: 'Select by hosts',
+                placeholder: '  Select by hosts',
                 data: _.sortBy(selectData, 'id'),
                 allowClear: true
             });
