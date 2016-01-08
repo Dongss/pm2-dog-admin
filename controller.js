@@ -91,17 +91,24 @@ module.exports.ioCtrl = function() {
         socket.on('pm2_list', function(data) {
             sendList(socket, data, server);
         });
+        try {
+            var handler = require("./event_handler").handler;
+            socket.on('event', function(data) {
+                handler(JSON.parse(data).event, server);
+            });
+        } catch(e) {
+        }
     });
 };
 
 module.exports.ioInit = function(io, callback) {
+    ioServer.list = function(list) {
+        io.emit('list', {
+            retCode: 0,
+            list: list
+        });
+    };
     io.on('connection', function(socket) {
-        ioServer.list = function(list) {
-            io.emit('list', {
-                retCode: 0,
-                list: list
-            });
-        };
-        return callback();
+        return callback(socket);
     });
 };

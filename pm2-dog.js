@@ -44,9 +44,8 @@ module.exports = function(port, host, config) {
     });
 
     http.listen(port, host, function(){
-        controller.ioInit(io, function() {
-            controller.ioCtrl();
-        });
+        controller.ioInit(io, function() {});
+        controller.ioCtrl();
         GLOBAL.logger.info('PM2-dog admin listening on: ', host, port);
     });
 };
