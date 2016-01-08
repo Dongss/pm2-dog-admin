@@ -1,6 +1,10 @@
 # pm2-dog-admin
 
-pm2 processes moniter on web
+Monit pm2 local and remote processes on web
+
+* monite cpu,memory usage
+* execute start,restart,reload,stop actions on web page 
+* catch pm2 events and handle these evens(such as catch crash event and then sending email)
 
 Monit services started by [pm2](https://github.com/Unitech/pm2) from local or remote host
 
@@ -78,9 +82,20 @@ PM2-dog admin listening on:  0.0.0.0 10106
 }
 ```
 
+### How to dandle pm2 events
+
+Create your `event_handler.js` file at `pm2-dog-admin/`  
+
+An example: [event_handler.js](https://github.com/Dongss/pm2-dog-admin/blob/master/default_event_handler.js)
+
+pm2 events:
+
+* restart
+* online
+* exit
+* restart overlimit
+
 ### Monite on web
 
 Visit url localhost:10106
 ![demo](./images/desc.png)
-
-
