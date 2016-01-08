@@ -106,7 +106,7 @@ var processesTable = {
 
         el.dataTable().fnClearTable();
         el.dataTable().fnAddData(data.list);
-        el.parent('div').siblings('.updated').html('[ UPDATED ]' + updated);
+        el.siblings('.updated').html('[ UPDATED ]' + updated);
     }
 };
 
