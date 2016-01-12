@@ -22,7 +22,7 @@ body {
     left: 0;
     right: 0;
     text-align: center;
-    index-z: 9999;
+    z-index: 9999;
 }
 .alias {
     color: rgba(33, 150, 243, 0.59);
