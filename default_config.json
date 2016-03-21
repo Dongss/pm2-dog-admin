@@ -11,5 +11,6 @@
         "alias": "TestHost",
         "host": "2.2.2.2",
         "port": 10105
-    }]
+    }],
+    "exclude": ["APPName"]
 }
