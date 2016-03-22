@@ -16,4 +16,4 @@ if (process.argv.indexOf("--config") != -1) {
     }
 }
 
-server(args.admin.port, args.admin.host, args.servers);
+server(args.admin.port, args.admin.host, args.servers, args.exclude);

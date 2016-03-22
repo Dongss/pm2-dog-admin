@@ -5,7 +5,8 @@ module.exports.handler = function(event, server) {
      * Event handler here
      * */
     // if exclude
-    if (SERVERS.exclude.indexOf(event.process.name) !== -1) {
+    var exclude = EXCLUDE.pname || [];
+    if (exclude.indexOf(event.process.name) !== -1) {
         return;
     }
     if (event.event == 'exit') {

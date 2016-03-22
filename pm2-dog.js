@@ -9,6 +9,7 @@ var path = require('path');
 var controller = require('./controller');
 GLOBAL.logger = GLOBAL.logger || console;
 SERVERS = [];
+EXCLUDE = {};
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -31,7 +32,7 @@ app.get('/action', function(req, res, next) {
 });
 
 // Create server
-module.exports = function(port, host, config) {
+module.exports = function(port, host, config, exclude) {
     config.forEach(function(server) {
         SERVERS.push({
             host: url.format({
@@ -42,6 +43,7 @@ module.exports = function(port, host, config) {
             alias: server.alias
         });
     });
+    EXCLUDE = exclude || {};
 
     http.listen(port, host, function(){
         controller.ioInit(io, function() {});
