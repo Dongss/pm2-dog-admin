@@ -28,6 +28,20 @@ var formatServers = function(server) {
     servers = _.uniq(servers, false, function(item) {
         return item.alias;
     });
+    servers.sort(function(a, b) {
+        var A = a.alias.toUpperCase();
+        var B = b.alias.toUpperCase();
+
+        if (A > B) {
+            return 1;
+        }
+
+        if (A < B) {
+            return -1;
+        }
+
+        return 0;
+    });
 };
 
 var processesTable = {
@@ -204,7 +218,7 @@ socket.on('connect', function() {
 
 socket.on('list', function(data) {
     if (data.retCode !== 0) { 
-        myAlert("warning", "Get ist failed: " + data.Message);
+        myAlert("warning", "Get list failed: " + data.Message);
         return; 
     }
     formatServers(data.list.server);
