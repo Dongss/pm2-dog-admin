@@ -7,6 +7,9 @@ module.exports.handler = function(event, server) {
     // if exclude
     var exclude = EXCLUDE.pname || [];
     if (exclude.indexOf(event.process.name) !== -1) {
+        /*
+         * Ignore processes
+         * */
         return;
     }
     if (event.event == 'exit') {
