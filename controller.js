@@ -1,5 +1,6 @@
 var moment = require('moment');
 var _ = require('underscore');
+var url = require('url');
 var request = require('request');
 var ioClient = require('socket.io-client');
 var ioServer = {};
@@ -31,10 +32,11 @@ function formatList(list, server) {
 
 module.exports.servers = function(req, res, next) {
     res.json({
+        retCode: 0,
         servers: _.map(SERVERS, function(server) {
             return {
-                id: server.alias,
-                text: server.alias
+                name: server.alias,
+                host: url.parse(server.host).hostname
             };
         })
     });
