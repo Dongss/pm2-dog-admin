@@ -170,7 +170,12 @@ var hostsSelectRender = function() {
         contentType: 'application/json'
     })
     .done(function(data) {
-        var selectData = data.servers;
+        var selectData = _.map(data.servers,function(server) {
+            return {
+                id: server.name,
+                text: server.name
+            };
+        });
         $(document).ready(function() {
             $('#hosts-select').select2({ // select2 init
                 placeholder: '  Select by hosts',
