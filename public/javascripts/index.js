@@ -1,4 +1,5 @@
 var socket = io.connect("http://192.168.8.131:10106");
+var SERVERS = [];
 
 var servers = [];
 var displayHosts = [];
@@ -21,27 +22,6 @@ var myAlert = function(alertClass, content, timeout) {
             $firstAlert.remove();
         }, timeout);
     }
-};
-
-var formatServers = function(server) {
-    servers.push(server);
-    servers = _.uniq(servers, false, function(item) {
-        return item.alias;
-    });
-    servers.sort(function(a, b) {
-        var A = a.alias.toUpperCase();
-        var B = b.alias.toUpperCase();
-
-        if (A > B) {
-            return 1;
-        }
-
-        if (A < B) {
-            return -1;
-        }
-
-        return 0;
-    });
 };
 
 var processesTable = {
@@ -124,29 +104,6 @@ var processesTable = {
     }
 };
 
-var renderList = function(list) {
-    list.list.forEach(function(process) {
-        process.pm2_env.label_class = statusLabelClass[process.pm2_env.status] || "label-default";
-    });
-
-    var updated = moment().format("HH:mm:ss");
-
-    servers.forEach(function(server) {
-        if (server.alias == list.server.alias) {
-            if ($("#" + server.alias).get(0)) { // Update if host exit
-                processesTable.reload($("#" + server.alias + " .table"), list, updated);
-            } else { // Append if not exit
-                var hostHtml = Mustache.to_html($("#pm2_list_host_container").html(), {
-                    server: server,
-                    updated: updated
-                });
-                $("#pm2-dog-list").append(hostHtml);
-                processesTable.init($("#" + server.alias + " .table"), list);
-            }
-        }
-    });
-};
-
 var actionRequest = function(alias, action, pmId) {
     $.ajax({
         url: "/action?alias=" + alias + "&action=" + action + "&pm_id=" + pmId,
@@ -164,13 +121,27 @@ var actionRequest = function(alias, action, pmId) {
     });
 };
 
-var hostsSelectRender = function() {
+var loadServers = function() {
     $.ajax({
         url: '/servers',
         contentType: 'application/json'
     })
     .done(function(data) {
-        var selectData = _.map(data.servers,function(server) {
+        SERVERS = data.servers.sort(function(a, b) {
+            var A = a.name.toUpperCase();
+            var B = b.name.toUpperCase();
+
+            if (A > B) {
+                return 1;
+            }
+
+            if (A < B) {
+                return -1;
+            }
+
+            return 0;
+        });
+        var selectData = _.map(SERVERS,function(server) {
             return {
                 id: server.name,
                 text: server.name
@@ -179,15 +150,41 @@ var hostsSelectRender = function() {
         $(document).ready(function() {
             $('#hosts-select').select2({ // select2 init
                 placeholder: '  Select by hosts',
-                data: _.sortBy(selectData, 'id'),
-                allowClear: true,
+                data: selectData,
+                namer: true,
                 tags: true
             });
         });
+        initServerList(SERVERS);
     })
     .fail(function(xhr, status, error) {
         myAlert("danger", "<strong>[ ERROR ]</strong> get hosts list failed: " + error);
     });
+};
+
+var initServerList = function(serverList) {
+    var updated = moment().format("HH:mm:ss");
+    serverList.forEach(function(server) {
+        var html = Mustache.to_html($("#host-container-tpl").html(), {
+            server: server,
+            updated: updated
+        });
+        $('#pm2-test').append(html);
+    });
+};
+
+var updateProcessList = function(list) {
+    var server = list.server;
+    var updated = moment().format("HH:mm:ss");
+    var $tableEl = $("#host-" + server.alias + " .table");
+
+    if (!$tableEl.length) {
+        var html = Mustache.to_html($("#process-list-tpl").html());
+        $("#host-" + server.alias).html(html);
+        processesTable.init($tableEl, list);
+    } else {
+        processesTable.reload($("#host-" + server.alias + " .table"), list, updated);
+    }
 };
 
 var onActionClicked = function(e) {
@@ -226,8 +223,7 @@ socket.on('list', function(data) {
         myAlert("warning", "Get list failed: " + data.Message);
         return; 
     }
-    formatServers(data.list.server);
-    renderList(data.list);
+    updateProcessList(data.list, data.server);
 });
 
 socket.on('disconnect', function() {
@@ -235,7 +231,7 @@ socket.on('disconnect', function() {
 });
 
 var init = function() {
-    hostsSelectRender();
+    loadServers();
     eventsInit();   
 };
 

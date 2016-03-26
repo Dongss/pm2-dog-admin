@@ -25,3 +25,34 @@
     {{{content}}}
 </div>
 </script>
+
+<script type="text/template" id="host-container-tpl">
+    <div id="host-{{server.name}}"> 
+        <div class="divider"></div>
+        <div class="host-head">
+            <span class="badge">{{server.host}}</span>
+            <span class="alias">{{server.name}}</span>
+            <span class="updated">[ UPDATED ]{{updated}}</span>
+        </div>
+        <div class="alert alert-info" role="alert">
+            <strong>Loading...</strong>
+            If no result for more than 10s, check if the host is connected
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="process-list-tpl">
+    <table class="table table-hover">
+        <thead>
+            <th>PID</th>
+            <th>PMID</th>
+            <th>Name</th>
+            <th>Restarts</th>
+            <th>Uptime</th>
+            <th>Status</th>
+            <th>CPU(%)</th>
+            <th>Memory(MB)</th>
+            <th>Action</th>
+        </thead>
+    </table>
+</script>

@@ -6,12 +6,12 @@ body {
     display: inline-block;
 }
 .divider {
-    height: 1px;
+    height: 2px;
     width:100%;
     display:block; /* for use on default inline elements like span */
     margin: 9px 0;
     overflow: hidden;
-    background-color: #e5e5e5;
+    background-color: rgba(33, 150, 243, 0.59);
 }
 .action {
     cursor: pointer;
@@ -26,8 +26,7 @@ body {
 }
 .alias {
     color: rgba(33, 150, 243, 0.59);
-    float: left;
-    font-size: 30px;
+    font-size: 25px;
 }
 .updated {
     float: right;
@@ -35,4 +34,7 @@ body {
 }
 .select2-dropdown {
     margin-left: 50px;
+}
+.host-head > .badge {
+    min-width: 110px;
 }
