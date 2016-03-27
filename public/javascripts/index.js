@@ -205,7 +205,7 @@ var onActionClicked = function(e) {
 
 var onProcessSelect = function(e) {
     var $target = $(e.currentTarget);
-    $('.pm2-host .table').each(function() {
+    $('.host-container .table').each(function() {
         $(this).DataTable()
             .column(2)
             .search($target.val())
