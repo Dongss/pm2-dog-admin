@@ -75,6 +75,7 @@ var processesTable = {
         });
     },
     reload: function(el, data, updated) {
+        /*
         var selectedHosts = $("#hosts-select").select2('data');
         displayHosts = _.map(selectedHosts, function(host) {
             return host.id;
@@ -97,10 +98,11 @@ var processesTable = {
                 hostEl.show();
             }
         }
+        */
 
         el.dataTable().fnClearTable();
         el.dataTable().fnAddData(data.list);
-        el.siblings('.updated').html('[ UPDATED ]' + updated);
+        el.siblings('.host-head').find('.updated').html('[ UPDATED ]' + updated);
     }
 };
 
@@ -174,16 +176,19 @@ var initServerList = function(serverList) {
 };
 
 var updateProcessList = function(list) {
+    list.list.forEach(function(process) {
+        process.pm2_env.label_class = statusLabelClass[process.pm2_env.status] || "label-default";
+    });
     var server = list.server;
     var updated = moment().format("HH:mm:ss");
     var $tableEl = $("#host-" + server.alias + " .table");
 
     if (!$tableEl.length) {
         var html = Mustache.to_html($("#process-list-tpl").html());
-        $("#host-" + server.alias).html(html);
-        processesTable.init($tableEl, list);
+        $("#host-" + server.alias).find('.alert').replaceWith(html);
+        processesTable.init($("#host-" + server.alias + " .table"), list);
     } else {
-        processesTable.reload($("#host-" + server.alias + " .table"), list, updated);
+        processesTable.reload($tableEl, list, updated);
     }
 };
 
