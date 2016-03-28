@@ -1,9 +1,6 @@
 var socket = io.connect("http://192.168.8.131:10106");
 var SERVERS = [];
 
-var servers = [];
-var displayHosts = [];
-
 var statusLabelClass = {
     online: "label-success",
     stopped: "label-warning",
@@ -15,6 +12,7 @@ var myAlert = function(alertClass, content, timeout) {
         class: alertClass,
         content: content
     });
+
     $("body").prepend(html);
     if (timeout) {
         var $firstAlert = $(".my-alert").first();
@@ -213,9 +211,34 @@ var onProcessSelect = function(e) {
     });
 };
 
+var onHostsSelect = function(e) {
+    var dataSelected = $(this).select2('data');
+    if (!dataSelected.length) {
+        $('.host-container').show();
+        return;
+    }
+
+    var hostsSelected = _.map(dataSelected, function(data) {
+        return data.id;
+    });
+    SERVERS.forEach(function(server) {
+        var displayed = _.find(hostsSelected, function(val) {
+            val = val.toUpperCase();
+            return server.name.toUpperCase().indexOf(val) > -1;
+        });
+        var $el = $('#host-' + server.name);
+        if (displayed) {
+            $el.show();
+        } else {
+            $el.hide();    
+        }
+    });
+};
+
 var eventsInit = function() {
     $("#pm2-dog-list").on("click", ".action", onActionClicked);
     $("#process-select").on("keyup", onProcessSelect);
+    $("#hosts-select").on("change", onHostsSelect);
 };
 
 
