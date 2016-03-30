@@ -73,31 +73,6 @@ var processesTable = {
         });
     },
     reload: function(el, data, updated) {
-        /*
-        var selectedHosts = $("#hosts-select").select2('data');
-        displayHosts = _.map(selectedHosts, function(host) {
-            return host.id;
-        });
-
-        if (displayHosts.length === 0) {
-            $('.pm2-host').show();
-        } else {
-            var display = _.find(displayHosts, function(host) {
-                var originString = data.server.alias.toLowerCase();
-                var subString = host.toLowerCase();
-                return originString.indexOf(subString) > -1;
-            });
-            var hostEl = el.closest('.pm2-host');
-            var hostElVisible = hostEl.is(':visible');
-            if (!display && hostElVisible) {
-                hostEl.hide();
-                return false; 
-            } else if (display && !hostElVisible){
-                hostEl.show();
-            }
-        }
-        */
-
         el.dataTable().fnClearTable();
         el.dataTable().fnAddData(data.list);
         el.siblings('.host-head').find('.updated').html('[ UPDATED ]' + updated);
