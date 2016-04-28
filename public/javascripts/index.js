@@ -1,4 +1,4 @@
-var socket = io.connect("http://192.168.8.131:10106");
+var socket = io.connect(ADMIN_SERVER);
 var SERVERS = [];
 
 var statusLabelClass = {

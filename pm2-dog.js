@@ -10,6 +10,8 @@ var controller = require('./controller');
 GLOBAL.logger = GLOBAL.logger || console;
 SERVERS = [];
 EXCLUDE = {};
+HOST = '';
+PORT = 0;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -33,6 +35,9 @@ app.get('/action', function(req, res, next) {
 
 // Create server
 module.exports = function(port, host, config, exclude) {
+    HOST = host;
+    PORT = port;
+
     config.forEach(function(server) {
         SERVERS.push({
             host: url.format({

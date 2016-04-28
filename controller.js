@@ -76,7 +76,10 @@ module.exports.action = function(req, res, next) {
 };
 
 module.exports.index = function(req, res, next) {
-    res.render('index', {});
+    res.render('index', {
+        adminHost: "http://" + HOST + ":" + PORT
+         
+    });
 };
 
 module.exports.ioCtrl = function() {
