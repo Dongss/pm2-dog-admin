@@ -24,6 +24,7 @@ function formatList(list, server) {
         _list.pm2_env.pm_uptime = _list.pm2_env.status == 'online' ? moment.unix(_list.pm2_env.pm_uptime / (1000)).toNow(true) : "-";
         _list.server_info = server;
     });
+
     return {
         list: list,
         server: server
@@ -78,7 +79,6 @@ module.exports.action = function(req, res, next) {
 module.exports.index = function(req, res, next) {
     res.render('index', {
         adminHost: "http://" + HOST + ":" + PORT
-         
     });
 };
 
@@ -93,26 +93,57 @@ module.exports.ioCtrl = function() {
 
     SERVERS.forEach(function(server) {
         var socket = ioClient.connect(server.host);
+
+        // pm2 dog server data pushed
         socket.on('pm2_list', function(data) {
             sendList(socket, data, server);
         });
+
+        // pm2 dog server connected
+        socket.on('connect', function() {
+            ioServer.onServerConnected(server);
+        });
+
+        // pm2 dog server disconnected
+        socket.on('disconnect', function() {
+            ioServer.onServerDisconnected(server);
+        });
+
         try {
             var handler = require("./event_handler").handler;
             socket.on('event', function(data) {
                 handler(JSON.parse(data).event, server);
             });
         } catch(e) {
+            console.log(e);
         }
     });
 };
 
 module.exports.ioInit = function(io, callback) {
+    // pm2 dog server data pushed
     ioServer.list = function(list) {
         io.emit('list', {
             retCode: 0,
             list: list
         });
     };
+
+    // pm2 dog server connected
+    ioServer.onServerConnected = function(server) {
+        io.emit('server-connected', {
+            server: server
+        });
+    };
+
+    // pm2 dog server disconnected
+    ioServer.onServerDisconnected = function(server) {
+        io.emit('server-disconnected', {
+            server: server
+        });
+    };
+
+    // pm2 dog admin connected
     io.on('connection', function(socket) {
         return callback(socket);
     });

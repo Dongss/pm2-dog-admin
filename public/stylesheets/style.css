@@ -38,3 +38,9 @@ body {
 .host-head > .badge {
     min-width: 110px;
 }
+.host-head > .badge.success {
+    background-color: #5cb85c;
+}
+.host-head > .badge.error {
+    background-color: #d9534f;
+}

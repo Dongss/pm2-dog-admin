@@ -210,6 +210,12 @@ var onHostsSelect = function(e) {
     });
 };
 
+var updateServerState = function(server, state) {
+    var $el = $('#host-' + server.alias);
+    var $badge = $el.find('.host-head .badge');
+    $badge.attr('class', 'badge ' + state);
+};
+
 var eventsInit = function() {
     $("#pm2-dog-list").on("click", ".action", onActionClicked);
     $("#process-select").on("keyup", onProcessSelect);
@@ -226,11 +232,22 @@ socket.on('list', function(data) {
         myAlert("warning", "Get list failed: " + data.Message);
         return; 
     }
-    updateProcessList(data.list, data.server);
+    updateServerState(data.list.server, 'success');
+    updateProcessList(data.list);
 });
 
 socket.on('disconnect', function() {
     myAlert("danger", "<strong>[ DISCONNECTED ]</strong>  You have been disconnected !");
+});
+
+// pm2 dog server connected
+socket.on('server-connected', function(data) {
+    updateServerState(data.server, 'success');
+});
+
+// pm2 dog server disconnected
+socket.on('server-disconnected', function(data) {
+    updateServerState(data.server, 'error');
 });
 
 var init = function() {
