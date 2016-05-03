@@ -51,6 +51,8 @@ $node index.js --config config.json
 PM2-dog admin listening on:  0.0.0.0 10106
 ```
 
+if your admin listen on 0.0.0.0, change `public/javascripts/index.js` first line `ADMIN_SERVER` to your host
+
 [config.json expample](https://github.com/Dongss/pm2-dog-admin/blob/master/default_config.json)
 
 ```
