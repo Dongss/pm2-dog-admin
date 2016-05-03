@@ -64,23 +64,13 @@ if your admin listen on 0.0.0.0, change `public/javascripts/index.js` first line
     "servers": [{
         "alias": "Local",
         "host": "1.1.1.1",
-        "port": 10105,
-        "categories": [{
-            "pm_name": "pm_name",
-            "category": "c_1"
-        }, {
-            "pm_name": "pm_name_2",
-            "category": "c_2"
-        }]
+        "port": 10105
     }, {
         "alias": "TestHost",
         "host": "2.2.2.2",
-        "port": 10105,
-        "categories": [{
-            "pm_name": "pm_name_23",
-            "category": "c_3"
-        }]
-    }]
+        "port": 10105
+    }],
+    "exclude": ["APPName"]
 }
 ```
 
