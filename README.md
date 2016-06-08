@@ -74,7 +74,7 @@ if your admin listen on 0.0.0.0, change `public/javascripts/index.js` first line
 }
 ```
 
-### How to dandle pm2 events
+### How to handle pm2 events
 
 Create your `event_handler.js` file at `pm2-dog-admin/`  
 
